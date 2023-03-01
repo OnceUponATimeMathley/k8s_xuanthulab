@@ -1,0 +1,41 @@
+
+Source: https://xuanthulab.net/cai-dat-va-su-dung-kubernetes-dashboard.html
+
+sudo kubeadm init --apiserver-advertise-address=172.16.10.100 --pod-network-cidr=192.168.0.0/16
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+hostname -I | awk '{print $1}'
+
+
+# Remove kube
+sudo kubeadm reset
+
+-------------------------
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+------------------------
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.5/manifests/calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+--------------
+kubeadm token create --print-join-command
+
+
+kubeadm join 10.0.2.15:6443 --token 0s78zc.j9gpgbv5fh965sm6 --discovery-token-ca-cert-hash sha256:e311d78bc86ec96fadf473de0d9f9a03ff11517353f956ecf68881a0aa629ee7
+-----------ERROR----------------
+The connection to the server .......... was refused - did you specify the right host or port? 
+
+solution<-------------------------------
+sudo -i
+swapoff -a
+exit
+strace -eopenat kubectl version
+
+
+
+-----------
+scp root@192.168.10.100:/etc/kubernetes/admin.conf ~/.kube/config-mycluster
+
+export KUBECONFIG=~/.kube/config:~/.kube/config-mycluster
+kubectl config view --flatten > ~/.kube/config_temp
+mv ~/.kube/config_temp ~/.kube/config
+
