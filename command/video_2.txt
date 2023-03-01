@@ -1,0 +1,17 @@
+Source: https://xuanthulab.net/cai-dat-va-su-dung-kubernetes-dashboard.html
+
+# COMMAND
+curl https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml > dashboard-v2-7-0.yaml
+
+
+sudo mkdir certs
+sudo chmod -R 777 certs
+openssl req -nodes -newkey rsa:2048 -keyout certs/dashboard.key -out certs/dashboard.csr -subj "/C=/ST=/L=/O=/OU=/CN=kubernetes-dashboard"
+openssl x509 -req -sha256 -days 365 -in certs/dashboard.csr -signkey certs/dashboard.key -out certs/dashboard.crt
+
+
+sudo kubectl create secret generic kubernetes-dashboard-certs --from-file=certs -n kubernetes-dashboard
+
+kubectl apply -f admin-user.yaml
+# Get token
+kubectl -n kubernetes-dashboard create token admin-user

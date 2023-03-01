@@ -19,6 +19,9 @@ kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/
 --------------
 kubeadm token create --print-join-command
 
+kubeadm join 172.16.10.100:6443 --token 120q64.s8f6akj21cla84fl \
+	--discovery-token-ca-cert-hash sha256:4a3f46a2e36ab7891acb2b82bff6fbad5439c0cbf768653ab204a4afa366b019
+
 
 kubeadm join 10.0.2.15:6443 --token 0s78zc.j9gpgbv5fh965sm6 --discovery-token-ca-cert-hash sha256:e311d78bc86ec96fadf473de0d9f9a03ff11517353f956ecf68881a0aa629ee7
 -----------ERROR----------------
